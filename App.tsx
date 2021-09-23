@@ -1,26 +1,10 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import firebase from "firebase/app";
-import "firebase/firestore";
+/* lib */
+import { getShops } from "./src/lib/firebase";
+/* types */
+import { Shop } from "./src/types/shop";
 
-if (!firebase.apps.length) {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDUJIkOjLvHwXStYJhrZOJcg6Q2wN6M9mc",
-    authDomain: "shop-review-1bd1e.firebaseapp.com",
-    projectId: "shop-review-1bd1e",
-    storageBucket: "shop-review-1bd1e.appspot.com",
-    messagingSenderId: "434538463213",
-    appId: "1:434538463213:web:2368755ffa81fa4a4d31e4",
-    measurementId: "G-S2XLPHTMCK",
-  };
-
-  firebase.initializeApp(firebaseConfig);
-}
-type Shop = {
-  name: string;
-  place: string;
-};
 export default function App() {
   const [shops, setShops] = useState<Shop[]>([]);
 
@@ -29,8 +13,7 @@ export default function App() {
   }, []);
 
   const getFirebaseItems = async () => {
-    const snapshot = await firebase.firestore().collection("shops").get();
-    const shops = snapshot.docs.map((doc) => doc.data() as Shop);
+    const shops = await getShops();
     setShops(shops);
   };
 
