@@ -10,9 +10,9 @@ const Tab = createBottomTabNavigator();
 export const MainTabNavigator = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: "#900",
-        inactiveTintColor: "#999",
+      screenOptions={{
+        tabBarActiveTintColor: "#900",
+        tabBarInactiveTintColor: "#999",
       }}
     >
       <Tab.Screen
