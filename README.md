@@ -4,6 +4,7 @@ React NativeとFirebaseで作るiOS/Androidアプリお店レビューアプリ�
 
 ## 使用技術
 ・React Nativeによるアプリ開発
+
 ・Firebaseでお店、レビュー、ユーザーの情報
 ・Hooksを用いたコンポーネント管理
 ・Contextによる状態管理
