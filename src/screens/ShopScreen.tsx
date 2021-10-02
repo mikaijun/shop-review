@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 
 /* components */
 import { ShopDetail } from "../components/ShopDetail";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { ReviewItem } from "../components/ReviewItem";
+import { ReviewsContext } from "../contexts/reviewsContext";
 
 /* types */
 import { RootStackParamList } from "../types/navigation";
@@ -19,7 +20,7 @@ type Props = {
 };
 export const ShopScreen: React.FC<Props> = ({ navigation, route }) => {
   const { shop } = route.params;
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const { reviews, setReviews } = useContext(ReviewsContext);
 
   useEffect(() => {
     navigation.setOptions({ title: shop.name });
@@ -27,7 +28,6 @@ export const ShopScreen: React.FC<Props> = ({ navigation, route }) => {
     const fetchReviews = async () => {
       if (!shop.id) return;
       const reviews = await getReviews(shop.id);
-      console.log(reviews);
       setReviews(reviews);
     };
 
