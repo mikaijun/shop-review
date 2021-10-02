@@ -47,11 +47,28 @@ export const updateUser = async (userId: string, params: any) => {
   await firebase.firestore().collection("users").doc(userId).update(params);
 };
 
-export const addReview = async (shopId: string | undefined, review: Review) => {
-  await firebase
+export const createReviewRef = async (shopId: string | undefined) => {
+  return await firebase
     .firestore()
     .collection("shops")
     .doc(shopId)
     .collection("reviews")
-    .add(review);
+    .doc();
+};
+
+export const uploadImage = async (uri: string, path: string) => {
+  // uriをblobに変換
+  const localUri = await fetch(uri);
+  const blob = await localUri.blob();
+  // storageにupload
+  const ref = firebase.storage().ref().child(path);
+
+  let downloadUrl = "";
+  try {
+    await ref.put(blob);
+    downloadUrl = await ref.getDownloadURL();
+  } catch (e) {
+    console.error(e);
+  }
+  return downloadUrl;
 };
