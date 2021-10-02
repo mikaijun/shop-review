@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, SafeAreaView, Text } from "react-native";
+import firebase from "firebase";
+import { addReview } from "../lib/firebase";
+import { UserContext } from "../contexts/useContexts";
 /* components */
 import { IconButton } from "../components/IconButton";
 import { TextArea } from "../components/TextArea";
 import { StarInput } from "../components/StarInputs";
+import { Button } from "../components/Button";
 /* types */
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigation";
 import { RouteProp } from "@react-navigation/native";
+import { Review } from "../types/review";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, "CreateReview">;
@@ -21,6 +26,7 @@ export const CreateReviewScreen: React.FC<Props> = ({
   const { shop } = route.params;
   const [text, setText] = useState<string>("");
   const [score, setScore] = useState<number>(3);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,6 +36,25 @@ export const CreateReviewScreen: React.FC<Props> = ({
       ),
     });
   }, [shop]);
+
+  const onSubmit = async () => {
+    if (!user) return;
+    const review = {
+      user: {
+        name: user.name,
+        id: user.id,
+      },
+      shop: {
+        name: shop.name,
+        id: shop.id,
+      },
+      text,
+      score,
+      updatedAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
+    } as Review;
+    await addReview(shop.id, review);
+  };
   return (
     <SafeAreaView>
       <StarInput score={score} onChangeScore={(value) => setScore(value)} />
@@ -39,6 +64,7 @@ export const CreateReviewScreen: React.FC<Props> = ({
         label="レビュー"
         placeholder="レビューを書いて下さい"
       />
+      <Button text="レビューを投稿する" onPress={onSubmit} />
     </SafeAreaView>
   );
   // useLayoutEffect(() => {
