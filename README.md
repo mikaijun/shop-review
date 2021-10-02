@@ -6,10 +6,15 @@ React NativeとFirebaseで作るiOS/Androidアプリお店レビューアプリ�
 ・React Nativeによるアプリ開発
 
 ・Firebaseでお店、レビュー、ユーザーの情報
+
 ・Hooksを用いたコンポーネント管理
+
 ・Contextによる状態管理
+
 ・React Navigationによる画面遷移
+
 ・Cloud Storageへの画像ファイルアップロード・ダウンロード
+
 ・Firebase Authenticationを用いたログイン処理
 
 
