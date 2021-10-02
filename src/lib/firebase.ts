@@ -67,8 +67,26 @@ export const uploadImage = async (uri: string, path: string) => {
   try {
     await ref.put(blob);
     downloadUrl = await ref.getDownloadURL();
-  } catch (e) {
-    console.error(e);
+  } catch {
+    console.error(OverconstrainedError);
   }
   return downloadUrl;
+};
+
+export const getReviews = async (shopId: string) => {
+  const reviewDocs = await firebase
+    .firestore()
+    .collection("shops")
+    .doc(shopId)
+    .collection("reviews")
+    .orderBy("createdAt", "desc")
+    .get();
+
+  console.log(
+    reviewDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Review))
+  );
+
+  return reviewDocs.docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Review)
+  );
 };
