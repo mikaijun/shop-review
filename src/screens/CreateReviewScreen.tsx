@@ -46,20 +46,25 @@ export const CreateReviewScreen: React.FC<Props> = ({
   }, [shop]);
 
   const onSubmit = async () => {
-    if (!text || !imageUri) {
-      Alert.alert("レビューまたは画像がありません");
+    if (!text) {
+      Alert.alert("レビューがありません");
       return;
     }
     setLoading(true);
     // documentのIDを先に取得
     const reviewDocRef = await createReviewRef(shop.id);
 
-    // storageのpathを決定
-    const ext = getExtension(imageUri);
-    const storagePath = `reviews/${reviewDocRef.id}.${ext}`;
+    let downloadUrl = "";
 
-    // 画像をstoreにアップロード
-    const downloadUrl = await uploadImage(imageUri, storagePath);
+    if (imageUri) {
+      // storageのpathを決定
+      const ext = getExtension(imageUri);
+      const storagePath = `reviews/${reviewDocRef.id}.${ext}`;
+
+      // 画像をstoreにアップロード
+      downloadUrl = await uploadImage(imageUri, storagePath);
+    }
+
     // reviewドキュメントを作る
     if (!user) return;
     const review = {
